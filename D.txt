@@ -1,0 +1,66 @@
+1) for (auto& [k,v] : m) v = "2"; - правильний варіант тому що при for (auto [k,v] : m) v = "2"; кожеш елемент копіюється в новій змінній k і v. 
+Тобто k і v це копії а не оригінальні значення з map. Коли змінюється v = "2" змінюється лише локальна змінна і після завершення ітерації копія зникає 
+і елемент map не змінюється
+auto& означає, що елементи k і v посилання на реальні елменти з map. Отже v = "2" змінює оригінальне значення в контейнері.
+
+2) class Base {
+public:
+    virtual ~Base() {}
+    virtual void f();
+};
+
+class D : public Base {
+    void f() override {}
+};
+override - це ключове слово, яке означає, що метод з базового клсу перевизначає віртуальну функцію в похідному
+
+3) Виправлений код: 
+#include <iostream>
+using namespace std;
+
+class User {
+private:
+    string password = "1234";
+public:
+    string name;
+    bool checkPassword(string pass) { return pass == password; }
+};
+
+int main() {
+    User u;
+    u.name = "Ivan";
+    cout << u.name << " login: " << boolalpha << u.checkPassword("1111");
+    return 0;
+}
+Помилки: не закрита дужка } в блоці main і відсутніть return 0; і неправильна дужка в рядку cout << u.name << " login: " << boolalpha << u.checkPassword("1111");
+Виведе - Ivan login: false
+
+4) Правельний код:
+#include <iostream>
+using namespace std;
+class Base {
+public:
+	virtual void show() { cout << "Base" << endl; }
+};
+class Derived : public Base {
+public:
+	void show() override { cout << "Derived" << endl; }
+};
+int main() {
+	Derived d;
+	d.show();
+}
+Виведе - Derived
+Помилки: в класі Base функція show не була публічною і не була virtual. і при створенні класу Derived він був не правильно оголошений і функція в ньому не була override
+
+5) Правильний код
+#include <map>
+#include <iostream>
+using namespace std;
+int main() {
+	map<string, int> m;
+	m.insert({ "apple", 5 });
+	cout << m["apple"] << endl;
+}
+Програма виведе 5
+Головною помилкою був неправильнрй синтаксис при використанні методу insert
